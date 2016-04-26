@@ -316,6 +316,7 @@
       "name": "[concat(parameters('virtualNetworkName'), '/', parameters('adSubnetName'))]",
       "location": "[resourceGroup().location]",
       "properties": {
+        "mode": "Incremental",
         "addressPrefix": "[parameters('adSubnet')]"
       }
     },
