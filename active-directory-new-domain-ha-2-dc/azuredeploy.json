@@ -281,33 +281,42 @@
       "apiVersion": "2015-05-01-preview",
       "location": "[parameters('location')]"
     },
+    //{
+    //  "name": "VNet",
+    //  "type": "Microsoft.Resources/deployments",
+    //  "apiVersion": "2015-01-01",
+    //  "properties": {
+    //    "mode": "Incremental",
+    //    "templateLink": {
+    //      "uri": "[variables('vnetTemplateUri')]",
+    //      "contentVersion": "1.0.0.0"
+    //    },
+    //    "parameters": {
+    //      "location": {
+    //        "value": "[parameters('location')]"
+    //      },
+    //      "virtualNetworkName": {
+    //        "value": "[parameters('virtualNetworkName')]"
+    //      },
+    //      "virtualNetworkAddressRange": {
+    //        "value": "[parameters('virtualNetworkAddressRange')]"
+    //      },
+    //      "subnetName": {
+    //        "value": "[parameters('adSubnetName')]"
+    //      },
+    //      "subnetRange": {
+    //        "value": "[parameters('adSubnet')]"
+    //      }
+    //    }
+    //  }
+    //},
     {
-      "name": "VNet",
-      "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
+      "type": "Microsoft.Network/virtualNetworks/subnets",
+      "name": "[concat(parameters('virtualNetworkName'), '/', parameters('adSubnetName'))]",
+      "location": "[resourceGroup().location]",
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('vnetTemplateUri')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "virtualNetworkName": {
-            "value": "[parameters('virtualNetworkName')]"
-          },
-          "virtualNetworkAddressRange": {
-            "value": "[parameters('virtualNetworkAddressRange')]"
-          },
-          "subnetName": {
-            "value": "[parameters('adSubnetName')]"
-          },
-          "subnetRange": {
-            "value": "[parameters('adSubnet')]"
-          }
-        }
+        "addressPrefix": "[parameters('adSubnet')]"
       }
     },
     {
@@ -523,43 +532,43 @@
         }
       ]
     },
-    {
-      "name": "UpdateVNetDNS1",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'),'/extensions/CreateADForest')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('vnetwithDNSTemplateUri')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "virtualNetworkName": {
-            "value": "[parameters('virtualNetworkName')]"
-          },
-          "virtualNetworkAddressRange": {
-            "value": "[parameters('virtualNetworkAddressRange')]"
-          },
-          "subnetName": {
-            "value": "[parameters('adSubnetName')]"
-          },
-          "subnetRange": {
-            "value": "[parameters('adSubnet')]"
-          },
-          "DNSServerAddress": {
-            "value": [
-              "[parameters('adPDCNicIPAddress')]"
-            ]
-          }
-        }
-      }
-    },
+    //{
+    //  "name": "UpdateVNetDNS1",
+    //  "type": "Microsoft.Resources/deployments",
+    //  "apiVersion": "2015-01-01",
+    //  "dependsOn": [
+    //    "[concat('Microsoft.Compute/virtualMachines/', parameters('adPDCVMName'),'/extensions/CreateADForest')]"
+    //  ],
+    //  "properties": {
+    //    "mode": "Incremental",
+    //    "templateLink": {
+    //      "uri": "[variables('vnetwithDNSTemplateUri')]",
+    //      "contentVersion": "1.0.0.0"
+    //    },
+    //    "parameters": {
+    //      "location": {
+    //        "value": "[parameters('location')]"
+    //      },
+    //      "virtualNetworkName": {
+    //        "value": "[parameters('virtualNetworkName')]"
+    //      },
+    //      "virtualNetworkAddressRange": {
+    //        "value": "[parameters('virtualNetworkAddressRange')]"
+    //      },
+    //      "subnetName": {
+    //        "value": "[parameters('adSubnetName')]"
+    //      },
+    //      "subnetRange": {
+    //        "value": "[parameters('adSubnet')]"
+    //      },
+    //      "DNSServerAddress": {
+    //        "value": [
+    //          "[parameters('adPDCNicIPAddress')]"
+    //        ]
+    //      }
+    //    }
+    //  }
+    //},
     {
       "name": "UpdateBDCNIC",
       "type": "Microsoft.Resources/deployments",
@@ -703,44 +712,44 @@
           }
         }
       }
-    },
-    {
-      "name": "UpdateVNetDNS2",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('adBDCVMName'),'/extensions/CreateBDC')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('vnetwithDNSTemplateUri')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "virtualNetworkName": {
-            "value": "[parameters('virtualNetworkName')]"
-          },
-          "virtualNetworkAddressRange": {
-            "value": "[parameters('virtualNetworkAddressRange')]"
-          },
-          "subnetName": {
-            "value": "[parameters('adSubnetName')]"
-          },
-          "subnetRange": {
-            "value": "[parameters('adSubnet')]"
-          },
-          "DNSServerAddress": {
-            "value": [
-              "[parameters('adPDCNicIPAddress')]",
-              "[parameters('adBDCNicIPAddress')]"
-            ]
-          }
-        }
-      }
-    }
+    }//,
+    //{
+    //  "name": "UpdateVNetDNS2",
+    //  "type": "Microsoft.Resources/deployments",
+    //  "apiVersion": "2015-01-01",
+    //  "dependsOn": [
+    //    "[concat('Microsoft.Compute/virtualMachines/',parameters('adBDCVMName'),'/extensions/CreateBDC')]"
+    //  ],
+    //  "properties": {
+    //    "mode": "Incremental",
+    //    "templateLink": {
+    //      "uri": "[variables('vnetwithDNSTemplateUri')]",
+    //      "contentVersion": "1.0.0.0"
+    //    },
+    //    "parameters": {
+    //      "location": {
+    //        "value": "[parameters('location')]"
+    //      },
+    //      "virtualNetworkName": {
+    //        "value": "[parameters('virtualNetworkName')]"
+    //      },
+    //      "virtualNetworkAddressRange": {
+    //        "value": "[parameters('virtualNetworkAddressRange')]"
+    //      },
+    //      "subnetName": {
+    //        "value": "[parameters('adSubnetName')]"
+    //      },
+    //      "subnetRange": {
+    //        "value": "[parameters('adSubnet')]"
+    //      },
+    //      "DNSServerAddress": {
+    //        "value": [
+    //          "[parameters('adPDCNicIPAddress')]",
+    //          "[parameters('adBDCNicIPAddress')]"
+    //        ]
+    //      }
+    //    }
+    //  }
+    //}
   ]
 }
